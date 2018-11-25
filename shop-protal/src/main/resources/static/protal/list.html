@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加商品信息</title>
+    <link href="../js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet"  href="../js/bootstrap/validator/css/bootstrapValidator.min.css">
+    <link rel="stylesheet" type="text/css"  href="../js/bootstrap/fileinput/css/fileinput.min.css" >
+    <style type="text/css">
+        .return{
+            float: right;
+            margin: 0px 30px;
+        }
+        .fontA{
+            float: left;
+            margin: 0px 30px;
+        }
+        .nav{
+            margin: 0;
+            padding-top: 10px;
+        }
+    </style>
+
+</head>
+<body>
+<nav class="navbar navbar-default nav">
+    <div>
+        <a href="javascript:;" class="fontA">欢迎进入商品管理</a>
+    </div>
+    <div class="return">
+        <a href="/goods/toGoods">返回</a>
+    </div>
+</nav>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-info">
+                <div class="panel-heading">添加商品信息</div>
+                <div class="panel-body">
+                    <table id="productTable" class="table">
+                        <tr>
+                            <th>商品名称</th>
+                            <th>商品价格</th>
+                            <th>品牌名称</th>
+                        </tr>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../js/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="../js/bootstrap/bootbox/bootbox.min.js"></script>
+<script src="../js/bootstrap/validator/js/bootstrapValidator.min.js"></script>
+<script type="text/javascript" src="../js/bootstrap/fileinput/js/fileinput.min.js"></script>
+<script type="text/javascript" src="../js/bootstrap/fileinput/js/locales/zh.js"></script>
+<script>
+    $(function () {
+        initProductList();
+    })
+
+    function initProductList(){
+        $.ajax({
+            url:"/product/findProductList",
+            type:"get",
+            success:function (result) {
+                if (result.code==200){
+                    var data = result.data;
+                    for (var i = 0; i <data.length ; i++) {
+                        var productVo = data[i];
+                        var  str = "<tr>";
+                        str += "<td>"+productVo.goodsName+"</td>";
+                        str += "<td>"+productVo.goodsPrice+"</td>";
+                        str += "<td>"+productVo.brandName+"</td>";
+                        str+="</tr>";
+                        $("#productTable").append(str);
+                    }
+                } else {
+                    alertHint(result.msg);
+                }
+            }
+        })
+    }
+
+
+
+    function alertHint(str){
+        bootbox.alert({
+            message: '<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>'+str,
+            size: 'small',
+            title:"提示信息"
+        });
+    }
+
+</script>
+</body>
+</html>
